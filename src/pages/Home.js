@@ -9,15 +9,16 @@ export default function Home() {
   const [ cocktailsState, setCocktailsState ] = React.useState([]);
 
   React.useEffect(() => {
-    getCocktails(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchTermState}`);
+    const baseUrl = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=";
+    getCocktails(baseUrl, searchTermState);
   },[searchTermState]);
 
-  async function getCocktails(search) {
+  async function getCocktails(baseUrl, search) {
     setLoadingState(true);
 
     try {
 
-      const response = await fetch(search).then( data => data.json() );
+      const response = await fetch(baseUrl + search).then( data => data.json() );
       const { drinks } = response;
 
       if ( drinks ) {
@@ -53,7 +54,7 @@ export default function Home() {
 
   return (
     <main>
-      <SearchForm searchTerm={setSearchTermState} />
+      <SearchForm setSearchTermState={setSearchTermState} />
       <CocktailList loading={loadingState} cocktails={cocktailsState} />
     </main>
   );
